@@ -1,4 +1,4 @@
-import { LucideTent } from "lucide-react";
+import { LucideSunMedium, LucideTent } from "lucide-react";
 
 export function Header() {
   return (
@@ -16,7 +16,7 @@ export function Header() {
         </p>
         <div className="mr-5">
           <button className="bg-blue-500 text-white px-3 py-1 rounded flex items-center gap-2 text-sm">
-            Edit
+            <LucideSunMedium />
           </button>
         </div>
       </div>
