@@ -1,6 +1,7 @@
 import "./index.css";
 import Header from "./components/header";
 import Actions from "./components/actions";
+import { TabelaExibicao } from "./components/tabelaExibicao";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
           to add new users
         </p>
         <Actions />
+        <hr className="text-gray-300 mt-4" />
+        <TabelaExibicao />
       </div>
     </>
   );
