@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-export function TabelaExibicao({ clientes }) {
-  const [selecionado, setSelecionado] = useState();
-
+export function TabelaExibicao({ clientes, selecionado, setSelecionado }) {
   console.log(selecionado);
 
   return (
