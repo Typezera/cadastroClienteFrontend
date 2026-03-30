@@ -1,9 +1,19 @@
 import "./index.css";
+import { useEffect } from "react";
 import Header from "./components/header";
 import Actions from "./components/actions";
 import { TabelaExibicao } from "./components/tabelaExibicao";
+import { useState } from "react";
 
 function App() {
+  const [clientes, setClientes] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/cliente")
+      .then((res) => res.json())
+      .then((data) => setClientes(data))
+      .catch((err) => console.error(err));
+  }, []);
   return (
     <>
       <Header />
@@ -17,9 +27,9 @@ function App() {
           Acme corp. is a global e-com company and this is a support application
           to add new users
         </p>
-        <Actions />
+        <Actions setClientes={setClientes} />
         <hr className="text-gray-300 mt-4" />
-        <TabelaExibicao />
+        <TabelaExibicao clientes={clientes} />
       </div>
     </>
   );

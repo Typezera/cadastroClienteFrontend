@@ -1,15 +1,7 @@
-import { useEffect } from "react";
 import { useState } from "react";
 
-export function TabelaExibicao() {
-  const [clientes, setClientes] = useState([]);
+export function TabelaExibicao({ clientes }) {
   const [selecionado, setSelecionado] = useState();
-
-  useEffect(() => {
-    fetch("http://localhost:8080/cliente")
-      .then((res) => res.json())
-      .then((data) => setClientes(data));
-  }, []);
 
   console.log(selecionado);
 
