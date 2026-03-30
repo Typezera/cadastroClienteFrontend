@@ -2,7 +2,7 @@ import { LucideTrash } from "lucide-react";
 import { useState } from "react";
 import { Modal } from "./modal";
 
-export function Actions({ setClientes, selecionado }) {
+export function Actions({ setClientes, selecionado, setModoModal, modoModal }) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const openModal = () => setModalIsOpen(true);
@@ -32,10 +32,27 @@ export function Actions({ setClientes, selecionado }) {
         <h1 className="font-bold text-3xl">Cliente List</h1>
         <div className="flex gap-3">
           <button
-            onClick={openModal}
+            onClick={() => {
+              setModoModal("create");
+              openModal();
+            }}
             className="bg-gray-200 p-2 text-cyan-700 rounded-md flex items-center justify-center font-semibold cursor-pointer hover:bg-gray-300"
           >
             <span className="font-bold text-2xl mr-2">+</span>Cadastrar Cliente
+          </button>
+          <button
+            className="bg-gray-600 p-2 text-white rounded-md flex items-center justify-center font-semibold cursor-pointer hover:bg-gray-300"
+            onClick={() => {
+              if (!selecionado) {
+                alert("Selecione um cliente!");
+                return;
+              }
+
+              setModoModal("edit");
+              openModal();
+            }}
+          >
+            Atualizar
           </button>
           <button
             onClick={handleDelete}
@@ -45,7 +62,13 @@ export function Actions({ setClientes, selecionado }) {
             Deletar Cliente
           </button>
           {modalIsOpen && (
-            <Modal setClientes={setClientes} closeModal={closeModal} />
+            <Modal
+              key={setModoModal + (selecionado?.id || "")}
+              setClientes={setClientes}
+              closeModal={closeModal}
+              selecionado={selecionado}
+              modo={modoModal}
+            />
           )}
         </div>
       </div>

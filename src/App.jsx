@@ -4,11 +4,11 @@ import Header from "./components/header";
 import Actions from "./components/actions";
 import { TabelaExibicao } from "./components/tabelaExibicao";
 import { useState } from "react";
-import UpdateInfo from "./components/updateInfo";
 
 function App() {
   const [clientes, setClientes] = useState([]);
   const [selecionado, setSelecionado] = useState(null);
+  const [modoModal, setModoModal] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:8080/cliente")
@@ -29,14 +29,19 @@ function App() {
           Acme corp. is a global e-com company and this is a support application
           to add new users
         </p>
-        <Actions setClientes={setClientes} selecionado={selecionado} />
+        <Actions
+          setClientes={setClientes}
+          selecionado={selecionado}
+          setModoModal={setModoModal}
+          modoModal={modoModal}
+        />
         <hr className="text-gray-300 mt-4" />
         <TabelaExibicao
           clientes={clientes}
           selecionado={selecionado}
           setSelecionado={setSelecionado}
         />
-        <UpdateInfo />
+        <hr className="text-gray-300 mt-3" />
       </div>
     </>
   );

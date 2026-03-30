@@ -1,10 +1,23 @@
 import { LucideX } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function Modal({ closeModal, setClientes }) {
+export function Modal({ closeModal, setClientes, selecionado, modo }) {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+
+  useEffect(() => {
+    if (modo === "edit" && selecionado) {
+      setNome(selecionado.nome);
+      setEmail(selecionado.email);
+    }
+    console.log(selecionado);
+    if (modo === "create") {
+      setNome("");
+      setEmail("");
+      setSenha("");
+    }
+  }, [modo, selecionado]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,29 +30,35 @@ export function Modal({ closeModal, setClientes }) {
 
     console.log(cliente);
     try {
-      const response = await fetch("http://localhost:8080/cliente", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(cliente),
-      });
+      let response;
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.log("ERRO BACKEND:", errorText);
-        throw new Error("Erro ao cadastrar");
+      if (modo === "create") {
+        response = await fetch("http://localhost:8080/cliente", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(cliente),
+        });
+        const novoCliente = await response.json();
+        setClientes((prev) => [...prev, novoCliente]);
+      } else {
+        response = await fetch(
+          `http://localhost:8080/cliente/${selecionado.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(cliente),
+          },
+        );
+        const clienteAtualizado = await response.json();
+
+        setClientes((prev) =>
+          prev.map((c) => (c.id === selecionado.id ? clienteAtualizado : c)),
+        );
       }
-
-      const novoCliente = await response.json();
-
-      setClientes((prev) => [...prev, novoCliente]);
-
-      console.log("Cadastrado com sucesso");
-      setNome("");
-      setEmail("");
-      setSenha("");
-
       closeModal();
     } catch (error) {
       console.error(error);
@@ -101,7 +120,7 @@ export function Modal({ closeModal, setClientes }) {
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
             >
-              Salvar
+              {modo === "create" ? "Salvar" : "Atualizar"}
             </button>
           </div>
         </form>
